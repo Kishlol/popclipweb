@@ -1,12 +1,9 @@
 import { z } from "zod";
-import { subtle } from "node:crypto";
+import { sha256 } from 'js-sha256';
 
-async function sha256Base64Url(message: string): Promise<string> {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(message);
-    const hashBuffer = await subtle.digest("SHA-256", data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashBase64 = btoa(hashArray.map((b) => String.fromCharCode(b)).join(""));
+function sha256Base64Url(message: string): string {
+    const hashArray = sha256.array(message);
+    const hashBase64 = btoa(String.fromCharCode(...hashArray));
     return hashBase64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
@@ -18,11 +15,11 @@ export const ZIconDescriptor = z.object({
 export type IconDescriptor = z.infer<typeof ZIconDescriptor>;
 export type IconKey = { opaque: string; raw: string };
 
-export async function generateKey(
+export function generateKey(
   descriptor: IconDescriptor,
-): Promise<IconKey> {
+): IconKey {
   const raw ="4" + JSON.stringify(descriptor);
-  return { opaque: (await sha256Base64Url(raw)).substring(0, 24), raw };
+  return { opaque: sha256Base64Url(raw).substring(0, 24), raw };
 }
 
 export function canonicalize(

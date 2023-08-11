@@ -14,8 +14,7 @@ const ext: Extension = params.value as Extension;
     </div>
 
     <h1>
-      <Icon :class="$style.HeaderIcon" v-if="ext.iconUrlWhite && ext.iconUrlBlack" :srcLight="ext.iconUrlBlack"
-        :srcDark="ext.iconUrlWhite" />
+      <Icon :class="$style.HeaderIcon" v-if="ext.iconSpecifier" :specifier="ext.iconSpecifier"/>
       {{ ext.name }}
     </h1>
 

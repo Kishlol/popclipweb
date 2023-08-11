@@ -8,11 +8,10 @@ defineProps<{
 </script>
 
 <template>
-    <div :class="$style.DirectoryEntry" v-once>
+    <div :class="$style.DirectoryEntry">
         <div :class="$style.EntryLeft">
             <a :href="'x/' + ext.shortcode">
-                <Icon v-if="ext.iconUrlWhite && ext.iconUrlBlack" :srcDark="ext.iconUrlWhite"
-                    :srcLight="ext.iconUrlBlack" />
+                <Icon v-if="ext.iconSpecifier" :specifier="ext.iconSpecifier" />
             </a>
         </div>
         <div :class="$style.EntryMain">
@@ -44,7 +43,8 @@ defineProps<{
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 0;
-    min-width: 0; /* Somehow this makes the truncation on the child element work */
+    min-width: 0;
+    /* Somehow this makes the truncation on the child element work */
 }
 
 .EntryLeft,
@@ -69,7 +69,7 @@ defineProps<{
 
 .EntryDescription {
     font-size: 14px;
-    
+
     /* Truncate text with ellipsis */
     white-space: nowrap;
     overflow: hidden;
